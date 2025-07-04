@@ -1,4 +1,9 @@
-import { Component } from '@angular/core';
+import {
+  afterEveryRender,
+  afterNextRender,
+  Component,
+  effect,
+} from '@angular/core';
 
 const log = (...messages: string[]) => {
   console.log(
@@ -16,6 +21,17 @@ export class HomePageComponent {
   constructor() {
     log('Constructor called');
   }
+
+  basicEffect = effect((onCleanup) => {
+    log(
+      'effect',
+      'Runs once after the component is initiated and every time an internal signal gets updated.'
+    );
+
+    onCleanup(() => {
+      log('onCleanup', 'Runs once before the effect or component is destroyed');
+    });
+  });
 
   ngOnInit() {
     log(
@@ -65,4 +81,22 @@ export class HomePageComponent {
       "Runs every time the component's view and child views have been checked for changes."
     );
   }
+
+  ngOnDestroy() {
+    log('ngOnDestroy called', '	Runs once before the component is destroyed.');
+  }
+
+  afterNextRenderEffect = afterNextRender(() =>
+    log(
+      'afterNextRender called',
+      'Runs once the next time that all components have been rendered to the DOM.'
+    )
+  );
+
+  afterEveryRenderEffect = afterEveryRender(() =>
+    log(
+      'afterEveryRender called',
+      '	Runs every time all components have been rendered to the DOM.'
+    )
+  );
 }
