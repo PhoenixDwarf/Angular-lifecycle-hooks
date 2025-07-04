@@ -3,6 +3,7 @@ import {
   afterNextRender,
   Component,
   effect,
+  signal,
 } from '@angular/core';
 
 const log = (...messages: string[]) => {
@@ -18,8 +19,25 @@ const log = (...messages: string[]) => {
   templateUrl: './home-page.component.html',
 })
 export class HomePageComponent {
+  traditionalProperty = 'Edwin';
+  signalProperty = signal('Edwin');
+
   constructor() {
     log('Constructor called');
+
+    setTimeout(() => {
+      this.traditionalProperty = 'Nemeguen';
+      // this.signalProperty.set('Nemeguen');
+      console.log('SetTimeout called');
+    }, 2000);
+  }
+
+  changeTraditionalProperty() {
+    this.traditionalProperty = 'Fabian';
+  }
+
+  changeSignalProperty() {
+    this.signalProperty.set('Fabian');
   }
 
   basicEffect = effect((onCleanup) => {
